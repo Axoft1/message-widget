@@ -1,12 +1,29 @@
 .App {
   text-align: center;
+  padding: 10px 20px;
 }
-
+.App__body {
+  display: flex;
+}
+.templateBlock {
+  width: 50%;
+}
+.template {
+  margin-top: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px rgb(190, 190, 190);
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
-
+.btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
