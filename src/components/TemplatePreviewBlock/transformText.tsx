@@ -1,15 +1,15 @@
 /**
  * transformText
- * 
+ *
  * Функция преобразует object data в string
- * @param {Array<object>} data Изначальный объект 
+ * @param {Array<object>} data Изначальный объект
  * @param {object} variableValue Ключом является переменная arrVarNames, значением вводимы текст input
  * @param {Array<string>} arrVarNames Массив переменных
  * @returns {string}
  */
 
 export const transformText = (
-  data: Array<object>,
+  data: Array<string | object>,
   variableValue: object,
   arrVarNames: Array<string>
 ): string => {
@@ -21,7 +21,7 @@ export const transformText = (
       ) {
         str = str.replaceAll(
           `{${arrVarNames[i]}}`,
-          `${variableValue[arrVarNames[i] as keyof typeof variableValue]}`
+          `${variableValue[arrVarNames[i] as keyof typeof variableValue]} `
         );
       } else {
         str = str.replaceAll(`{${arrVarNames[i]}}`, "");
@@ -34,13 +34,19 @@ export const transformText = (
     let txt = "";
     for (let key in ob) {
       if (key === "if") {
-        let t = filterText(ob[key]);
+        let t = filterText(ob[key]).trim()
         if (t.length > 0) {
-          typeof ob["then"][0] === "object"
-            ? (txt += object(ob["then"][0]))
-            : (txt += ob["then"][0]);
-        } else {
-          txt += ob["else"][0];
+          txt += `${ob["then"][0]} `;
+          if (ob["then"][1]) {
+            txt += `${object(ob["then"][1])} `;
+            txt += `${ob["then"][2]} `;
+          }
+        } else {          
+          txt += `${ob["else"][0]} `;
+          if (ob["else"][1]) {
+            txt += `${object(ob["else"][1])} `;
+            txt += `${ob["else"][2]} `;
+          }
         }
       }
     }
@@ -55,5 +61,7 @@ export const transformText = (
       transformText(data[i] as Array<object>, variableValue, arrVarNames);
     }
   }
-  return text;
+console.log(text);
+
+  return text.trim().replace(/\s{2,}/g, ' ');
 };

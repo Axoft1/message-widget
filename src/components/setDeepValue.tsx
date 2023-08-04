@@ -36,12 +36,11 @@ export function setDeepValue(
     if (typeof value === "string") {
       const updatedText =
         current.slice(0, selectionStart === null ? 0 : selectionStart) +
-        `{${value}}` +
+        ` {${value}}` +
         current.slice(selectionStart === null ? 0 : selectionStart);
       return updatedText;
     }
   };
-
   // Создаем копию объекта
   const newObj = Array.isArray(obj) ? [...obj] : { ...obj };
   // Копируем ссылку на объект newObj

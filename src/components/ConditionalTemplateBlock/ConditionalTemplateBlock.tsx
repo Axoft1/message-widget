@@ -37,6 +37,7 @@ const ConditionalTemplateBlock = ({
           IF{" "}
           <input
             value={condition.if}
+            placeholder="Write a condition"
             data-path={ifPath.join("-")}
             onFocus={() => {
               setPath(ifPath);

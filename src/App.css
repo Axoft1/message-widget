@@ -6,12 +6,16 @@
   display: flex;
 }
 .templateBlock {
-  width: 50%;
+  flex: 1;
+}
+.templatePreviewBlock{
+  flex: 1;
 }
 .template {
   margin-top: 10px;
   border-radius: 10px;
   box-shadow: 0px 0px 5px rgb(190, 190, 190);
+  margin-bottom: 10px;
 }
 .App-logo {
   height: 40vmin;
@@ -52,4 +56,19 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.my-node-enter {
+  opacity: 0;
+}
+.my-node-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+.my-node-exit {
+  opacity: 1;
+}
+.my-node-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
 }

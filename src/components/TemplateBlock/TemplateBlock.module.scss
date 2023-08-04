@@ -1,9 +1,35 @@
-.block{
-    display: flex;
-    flex-direction: column;
-    align-items: self-end;
-    div{
-        box-sizing: border-box;
-        width: 100%;
+.block {
+  display: flex;
+  flex-direction: column;
+  align-items: self-end;
+  div {
+    box-sizing: border-box;
+    width: 100%;
+  }
+}
+.mentionWrapper {
+  padding: 10px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  textarea {
+    min-width: 100%;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.06);
+    resize: vertical;
+    border-radius: 15px;
+    border: 0;
+    resize: none;
+    box-sizing: border-box;
+    padding: 0.7rem 1rem;
+    color: #7288a3;
+    border-color: #3a546f;
+    overflow: hidden;
+    &:focus {
+      outline: none !important;
+      border-color: #719ece;
+      box-shadow: 0 0 10px #719ece;
     }
+  }
+}
+.mention {
+  padding: 10px;
 }

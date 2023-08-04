@@ -21,28 +21,21 @@ const TemplateBlock = ({
         const curPath = path.concat(index);
         if (typeof val === "string") {
           return (
-            <div key={index}>
-              {/* <MentionsInput
-                className="mentionWrapper"
+            <div  key={index}>
+              <MentionsInput
+                key={index}
+                className={styles.mentionWrapper}
+                data-path={curPath.join("-")}
+                onFocus={() => {
+                  setPath(curPath);
+                }}
                 value={val}
                 onChange={(evt) => {
                   update(curPath, evt.target.value, null, "change");
                 }}
               >
-                <Mention trigger="@" data={null} />
-              </MentionsInput> */}
-              <textarea
-                // cols={40}
-                rows={2}
-                value={val}
-                data-path={curPath.join("-")}
-                onFocus={() => {
-                  setPath(curPath);
-                }}
-                onChange={(evt) => {
-                  update(curPath, evt.target.value, null, "change");
-                }}
-              />
+                <Mention className={styles.mention} data={[]} trigger={""} />
+              </MentionsInput>             
             </div>
           );
         }

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { transformText } from "./transformText";
-import styles from './TemplatePreviewBlock.module.scss'
+import styles from "./TemplatePreviewBlock.module.scss";
 import { MentionsInput, Mention } from "react-mentions";
+import style from "../TemplateBlock/TemplateBlock.module.scss";
+import Button from "../Button";
 
 interface TemplatePreviewBlockProps {
   data: Array<object>;
@@ -12,7 +14,7 @@ const TemplatePreviewBlock = ({
   arrVarNames,
 }: TemplatePreviewBlockProps) => {
   const [variableValue, setVariableValue] = useState({});
-  
+
   const variableHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVariableValue((variableValue) => ({
       ...variableValue,
@@ -31,12 +33,13 @@ const TemplatePreviewBlock = ({
 
   return (
     <div className={styles.previewBlock}>
-      
-      <textarea
-        cols={40}
+      <MentionsInput
+        className={style.mentionWrapper}
         readOnly={true}
         value={transformText(data, variableValue, arrVarNames)}
-      />
+      >
+        <Mention className={styles.mention} data={[]} trigger={""} />
+      </MentionsInput>
       <div className={styles.inputs}>
         Variables: {""}
         {arrVarNames.map((el: string, index: number) => (
@@ -48,7 +51,6 @@ const TemplatePreviewBlock = ({
           />
         ))}
       </div>
-      <div className={styles.overlay}></div>
     </div>
   );
 };

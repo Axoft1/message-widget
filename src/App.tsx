@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { setDeepValue } from "./components/setDeepValue";
 import TemplateBlock from "./components/TemplateBlock/TemplateBlock";
 import TemplatePreviewBlock from "./components/TemplatePreviewBlock/TemplatePreviewBlock";
@@ -6,23 +6,24 @@ import { DataContext } from "./Context";
 import varNames from "./JSON/varNames.json";
 import Button from "./components/Button";
 import "./App.css";
+import { CSSTransition } from "react-transition-group";
 
 const initialData = [
-  "Lorem ipsum dolor sit amet",
+  "Example of the initial text",
   {
     if: "",
     then: [
-      "Condition",
+      "Condition initial",
       {
         if: "",
-        then: ["Condition Then"],
-        else: ["Condition Else"],
+        then: ["Then"],
+        else: ["Else"],
       },
-      " Then",
+      "Condition final",
     ],
     else: ["Condition Else"],
   },
-  "Xotam ex eligendi optio est inventore, odio enim!",
+  "Last text",
 ];
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
   const [data, setState] = useState<object>(initialData);
   const [activePath, setPath] = useState<Array<string | number> | null>(null);
   const [arrVarNames, setArrVarNames] = useState<Array<string>>([]);
+  const [inProp, setInProp] = useState(false);
+  const nodeRef = useRef(null);
 
   const update = (
     path: Array<string | number>,
@@ -58,8 +61,8 @@ function App() {
         activePath,
         {
           if: "",
-          then: ["Condition Then"],
-          else: ["Condition Else"],
+          then: ["Then"],
+          else: ["Else"],
         },
         (el as HTMLInputElement).selectionStart,
         "ifThenElse"
@@ -76,55 +79,97 @@ function App() {
   useEffect(() => {
     setArrVarNames(varNames);
   }, []);
+
+  async function saveToLocalStorage(data: Object) {
+    try {
+      localStorage.setItem("data", JSON.stringify(data));
+    } catch (e: any) {
+      console.error(e.message);
+      return null;
+    }
+  }
+
+  useEffect(() => {
+    let data = localStorage.getItem("data");
+    if (data !== null) {
+      let parsedData = JSON.parse(data); // преобразуем строку в объект
+      setState(parsedData);
+    } else {
+      console.log("Данные не найдены в localStorage.");
+    }
+  }, []);
+
   return (
     <DataContext.Provider value={{ update, setPath, setShow }}>
       <div className="App">
-        {show && (
+        {!show && (
           <Button onClick={() => setShow(true)} className={"start"}>
             Message Editor
           </Button>
         )}
 
-        {!show && (
-          <div className="App__body">
-            <div className="templateBlock">
-              <div className="btns">
-                {arrVarNames.map((e, index) => (
+        {show && (
+          <>
+            <div className="App__body">
+              <div className="templateBlock">
+                <div className="btns">
+                  {arrVarNames.map((e, index) => (
+                    <Button
+                      key={index}
+                      onClick={() => widgetController(e)}
+                      className="names"
+                    >{`{${e}}`}</Button>
+                  ))}
                   <Button
-                    key={index}
-                    onClick={() => widgetController(e)}
+                    onClick={() => widgetController("ifThenElse")}
                     className="names"
-                  >{`{${e}}`}</Button>
-                ))}
-                <Button
-                  onClick={() => widgetController("ifThenElse")}
-                  className="names"
-                >
-                  Add If-Then-Else
-                </Button>
+                  >
+                    Add If-Then-Else
+                  </Button>
+                </div>
+                <div className="template">
+                  <TemplateBlock
+                    widgetController={widgetController}
+                    data={data as Array<object>}
+                    path={[]}
+                  />
+                </div>
+                {
+                  <Button
+                    onClick={() => setInProp(!inProp)}
+                    className={"names"}
+                  >
+                    Preview
+                  </Button>
+                }
               </div>
-              <div className="template">
-                <TemplateBlock
-                  widgetController={widgetController}
-                  data={data as Array<object>}
-                  path={[]}
-                />
+              <div className="templatePreviewBlock">
+                <CSSTransition
+                  nodeRef={nodeRef}
+                  in={inProp}
+                  timeout={200}
+                  classNames="my-node"
+                >
+                  <div ref={nodeRef}>
+                    {inProp && (
+                      <TemplatePreviewBlock
+                        data={data as Array<object>}
+                        arrVarNames={arrVarNames}
+                      />
+                    )}
+                  </div>
+                </CSSTransition>
               </div>
             </div>
-            {preview && (
-              <TemplatePreviewBlock
-                data={data as Array<object>}
-                arrVarNames={arrVarNames}
-              />
-            )}
-          </div>
+            <Button
+              onClick={() => saveToLocalStorage(data)}
+              className="names"
+              children="Save"
+            />
+          </>
         )}
       </div>
-      {
-        <Button onClick={() => setPreview(!preview)} className={"names"}>
-          Preview
-        </Button>
-      }
+
       {show && <Button onClick={() => setShow(false)} className={"close"} />}
     </DataContext.Provider>
   );
