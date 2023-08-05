@@ -1,7 +1,9 @@
+import { Mention, MentionsInput } from "react-mentions";
 import { useDataUpdate } from "../../Context";
 import Button from "../Button";
 import TemplateBlock from "../TemplateBlock/TemplateBlock";
 import styles from "./ConditionalTemplateBlock.module.scss";
+import style from "../TemplateBlock/TemplateBlock.module.scss";
 
 interface ConditionalTemplateBlockProps {
   condition: {
@@ -35,7 +37,19 @@ const ConditionalTemplateBlock = ({
       <div>
         <div className={styles.ifBlock}>
           IF{" "}
-          <input
+          <MentionsInput
+            value={condition.if}
+            className={style.mentionWrapper}
+            data-path={ifPath.join("-")}
+            onFocus={() => {
+              setPath(ifPath);
+            }}
+            onChange={(evt) => {
+              update(ifPath, evt.target.value, null, "change")}}
+          >
+            <Mention className={styles.mention} data={[]} trigger={""} />
+          </MentionsInput>
+          {/* <input
             value={condition.if}
             placeholder="Write a condition"
             data-path={ifPath.join("-")}
@@ -45,7 +59,7 @@ const ConditionalTemplateBlock = ({
             onChange={(evt) => {
               update(ifPath, evt.target.value, null, "change");
             }}
-          />{" "}
+          />{" "} */}
         </div>
         <div className={styles.ifBlock}>
           THEN{" "}

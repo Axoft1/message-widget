@@ -8,28 +8,10 @@ import Button from "./components/Button";
 import "./App.css";
 import { CSSTransition } from "react-transition-group";
 
-const initialData = [
-  "Example of the initial text",
-  {
-    if: "",
-    then: [
-      "Condition initial",
-      {
-        if: "",
-        then: ["Then"],
-        else: ["Else"],
-      },
-      "Condition final",
-    ],
-    else: ["Condition Else"],
-  },
-  "Last text",
-];
-
 function App() {
   const [show, setShow] = useState<boolean>(false);
   const [preview, setPreview] = useState<boolean>(false);
-  const [data, setState] = useState<object>(initialData);
+  const [data, setState] = useState<object>(['']);
   const [activePath, setPath] = useState<Array<string | number> | null>(null);
   const [arrVarNames, setArrVarNames] = useState<Array<string>>([]);
   const [inProp, setInProp] = useState(false);
@@ -61,8 +43,8 @@ function App() {
         activePath,
         {
           if: "",
-          then: ["Then"],
-          else: ["Else"],
+          then: [""],
+          else: [""],
         },
         (el as HTMLInputElement).selectionStart,
         "ifThenElse"
@@ -75,10 +57,7 @@ function App() {
         "name"
       );
     }
-  };
-  useEffect(() => {
-    setArrVarNames(varNames);
-  }, []);
+  }; 
 
   async function saveToLocalStorage(data: Object) {
     try {
@@ -91,6 +70,13 @@ function App() {
 
   useEffect(() => {
     let data = localStorage.getItem("data");
+    let arrVarNames = localStorage.getItem("arrVarNames");
+    if (arrVarNames !== null) {
+      let parsedData = JSON.parse(arrVarNames); // преобразуем строку в объект
+      setArrVarNames(parsedData);
+    } else {
+      setArrVarNames(varNames);
+    }
     if (data !== null) {
       let parsedData = JSON.parse(data); // преобразуем строку в объект
       setState(parsedData);

@@ -36,7 +36,7 @@ export function setDeepValue(
     if (typeof value === "string") {
       const updatedText =
         current.slice(0, selectionStart === null ? 0 : selectionStart) +
-        ` {${value}}` +
+        `{${value}}` +
         current.slice(selectionStart === null ? 0 : selectionStart);
       return updatedText;
     }
@@ -53,7 +53,7 @@ export function setDeepValue(
       
       //Удаление If Then Else
       if (point === "delet" && typeof key === "number") {
-        const connectLines = current[key - 1] + current[key + 1];
+        const connectLines = `${current[key - 1]} ${current[key + 1]}`;
         current[key] = connectLines;
         current.splice(key - 1, 1);
         current.splice(key, 1);

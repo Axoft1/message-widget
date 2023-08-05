@@ -3,7 +3,6 @@ import { transformText } from "./transformText";
 import styles from "./TemplatePreviewBlock.module.scss";
 import { MentionsInput, Mention } from "react-mentions";
 import style from "../TemplateBlock/TemplateBlock.module.scss";
-import Button from "../Button";
 
 interface TemplatePreviewBlockProps {
   data: Array<object>;
@@ -13,8 +12,7 @@ const TemplatePreviewBlock = ({
   data,
   arrVarNames,
 }: TemplatePreviewBlockProps) => {
-  const [variableValue, setVariableValue] = useState({});
-
+  const [variableValue, setVariableValue] = useState({});  
   const variableHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVariableValue((variableValue) => ({
       ...variableValue,
@@ -24,9 +22,10 @@ const TemplatePreviewBlock = ({
 
   useEffect(() => {
     for (let key in arrVarNames) {
+      
       setVariableValue((variableValue) => ({
         ...variableValue,
-        [arrVarNames[key]]: "",
+        [`${arrVarNames[key]}`]: "",
       }));
     }
   }, [arrVarNames]);
