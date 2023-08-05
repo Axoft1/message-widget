@@ -10,7 +10,7 @@ import { CSSTransition } from "react-transition-group";
 
 function App() {
   const [show, setShow] = useState<boolean>(false);
-  const [preview, setPreview] = useState<boolean>(false);
+  // const [preview, setPreview] = useState<boolean>(false);
   const [data, setState] = useState<object>(['']);
   const [activePath, setPath] = useState<Array<string | number> | null>(null);
   const [arrVarNames, setArrVarNames] = useState<Array<string>>([]);
