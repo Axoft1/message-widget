@@ -40,7 +40,7 @@ describe("function transformText", () => {
     const arrVarNames = ["firstname", "lastname", "company", "position"];
 
     expect(transformText(data, variableValue, arrVarNames)).toBe(
-      "Example of the initial text Condition Else Last text"
+      "Example of the initial textCondition ElseLast text"
     );
   });
   test("transformText, the first If", () => {
@@ -71,7 +71,7 @@ describe("function transformText", () => {
     const arrVarNames = ["firstname", "lastname", "company", "position"];
 
     expect(transformText(data, variableValue, arrVarNames)).toBe(
-      "Example of the initial text Condition initial Else Condition final Last text"
+      "Example of the initial textCondition initialElseCondition finalLast text"
     );
   });
 
@@ -103,7 +103,7 @@ describe("function transformText", () => {
     const arrVarNames = ["firstname", "lastname", "company", "position"];
 
     expect(transformText(data, variableValue, arrVarNames)).toBe(
-      "Example of the initial text Condition initial Then Condition final Last text"
+      "Example of the initial textCondition initialThenCondition finalLast text"
     );
   });
   test("transformText,THEN, added variableValue", () => {
@@ -134,7 +134,7 @@ describe("function transformText", () => {
     const arrVarNames = ["firstname", "lastname", "company", "position"];
 
     expect(transformText(data, variableValue, arrVarNames)).toBe(
-      "Example of the initial text Alex Condition initial Rassel Condition final Last text Apple"
+      "Example of the initial textAlex Condition initialRasselCondition finalLast text Apple"
     );
   });
 
@@ -166,7 +166,7 @@ describe("function transformText", () => {
     const arrVarNames = ["firstname", "lastname", "company", "position"];
 
     expect(transformText(data, variableValue, arrVarNames)).toBe(
-      "Example of the initial text Condition Else Last text Apple"
+      "Example of the initial textCondition ElseLast text Apple"
     );
   });
 
@@ -198,7 +198,7 @@ describe("function transformText", () => {
     const arrVarNames = ["firstname", "lastname", "company", "position"];
 
     expect(transformText(data, variableValue, arrVarNames)).toBe(
-      "Example of the initial text Alex Condition initial Else Condition final Last text Apple"
+      "Example of the initial textAlex Condition initialElseCondition finalLast text Apple"
     );
   });
   test("transformText, ELSE, there is no firstname variable", () => {
@@ -237,7 +237,7 @@ describe("function transformText", () => {
     const arrVarNames = ["firstname", "lastname", "company", "position"];
 
     expect(transformText(data, variableValue, arrVarNames)).toBe(
-      "Example of the initial text Rassel Condition initial ELSE Rassel Condition final Last text Apple"
+      "Example of the initial textRassel Condition initial ELSERasselCondition finalLast text Apple"
     );
   });
 });

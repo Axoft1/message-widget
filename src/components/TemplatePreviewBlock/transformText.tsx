@@ -17,10 +17,11 @@ export const transformText = (
     let newText = str.replace(/\{([\w]*?)\}/g, (match, key): string =>
       key in variableValue
         ? `${variableValue[key as keyof typeof variableValue]}`
-        : ""
+        : `${match}`
     );    
     return newText;
   };
+  
   let text = "";
   const object = (ob: any) => {
     let txt = "";
