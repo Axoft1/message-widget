@@ -11,7 +11,7 @@ import { CSSTransition } from "react-transition-group";
 function App() {
   const [show, setShow] = useState<boolean>(false);
   const [data, setState] = useState<object>(['']);
-  const [elQ, setEl] = useState<any>(0);
+  const [cursorPosition, setCursorPosition] = useState<any>(0);
   const [activePath, setPath] = useState<Array<string | number> | null>(null);
   const [arrVarNames, setArrVarNames] = useState<Array<string>>([]);
   const [inProp, setInProp] = useState(false);
@@ -41,7 +41,7 @@ function App() {
   
     
     if ((el as HTMLInputElement).selectionStart !==  0) {      
-      setEl((e:any)=> e=(el as HTMLInputElement).selectionStart);
+      setCursorPosition((e:any)=> e=(el as HTMLInputElement).selectionStart);
     }
     if (value === "ifThenElse") {
       update(
@@ -59,7 +59,7 @@ function App() {
         activePath,
         value,
         (el as HTMLInputElement).selectionStart === 0
-          ? elQ
+          ? cursorPosition
           : (el as HTMLInputElement).selectionStart,
         "name"
       );
