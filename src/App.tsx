@@ -10,8 +10,8 @@ import { CSSTransition } from "react-transition-group";
 
 function App() {
   const [show, setShow] = useState<boolean>(false);
-  // const [preview, setPreview] = useState<boolean>(false);
   const [data, setState] = useState<object>(['']);
+  const [elQ, setEl] = useState<any>(0);
   const [activePath, setPath] = useState<Array<string | number> | null>(null);
   const [arrVarNames, setArrVarNames] = useState<Array<string>>([]);
   const [inProp, setInProp] = useState(false);
@@ -22,13 +22,14 @@ function App() {
     val: string | object,
     selectionStart: number | null,
     point: string
-  ) => {
+  ) => {    
     setState((prevData: object): object =>
       setDeepValue(prevData, path, val, selectionStart, point)
     );
   };
-
+  
   const widgetController = (value: string | (string | number)[]) => {
+    
     if (Array.isArray(value)) {
       update(value, "", null, "delet");
       return;
@@ -37,7 +38,11 @@ function App() {
       return;
     }
     const el = document.querySelector(`[data-path="${activePath.join("-")}"]`);
-
+  
+    
+    if ((el as HTMLInputElement).selectionStart !==  0) {      
+      setEl((e:any)=> e=(el as HTMLInputElement).selectionStart);
+    }
     if (value === "ifThenElse") {
       update(
         activePath,
@@ -48,12 +53,14 @@ function App() {
         },
         (el as HTMLInputElement).selectionStart,
         "ifThenElse"
-      );
-    } else {
+        );
+      } else {
       update(
         activePath,
         value,
-        (el as HTMLInputElement).selectionStart,
+        (el as HTMLInputElement).selectionStart === 0
+          ? elQ
+          : (el as HTMLInputElement).selectionStart,
         "name"
       );
     }

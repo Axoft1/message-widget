@@ -48,18 +48,7 @@ const ConditionalTemplateBlock = ({
               update(ifPath, evt.target.value, null, "change")}}
           >
             <Mention className={styles.mention} data={[]} trigger={""} />
-          </MentionsInput>
-          {/* <input
-            value={condition.if}
-            placeholder="Write a condition"
-            data-path={ifPath.join("-")}
-            onFocus={() => {
-              setPath(ifPath);
-            }}
-            onChange={(evt) => {
-              update(ifPath, evt.target.value, null, "change");
-            }}
-          />{" "} */}
+          </MentionsInput>         
         </div>
         <div className={styles.ifBlock}>
           THEN{" "}
