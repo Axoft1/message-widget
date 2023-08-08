@@ -65,8 +65,7 @@ function App() {
     if (activePath === null) {
       return;
     }
-    console.log(el.selectionStart);
-    if (el.selectionStart !== 0) {
+    if (el.selectionStart !== 0 && e !== "ifThenElse") {
       setCursorPosition({ el: activePath, selectionStart: el.selectionStart });
     }
     if (
@@ -75,6 +74,7 @@ function App() {
       el.selectionStart === 0
     ) {
       if (e === "ifThenElse") {
+        console.log(cursorPosition);
         update(
           activePath,
           {
@@ -85,8 +85,12 @@ function App() {
           cursorPosition.selectionStart,
           "ifThenElse"
         );
-      }else{
-
+      } else {
+        let selectionStart1 = cursorPosition.selectionStart + e.length + 2;
+        setCursorPosition({
+          ...cursorPosition,
+          selectionStart: selectionStart1,
+        });
         update(activePath, e, cursorPosition.selectionStart, "name");
       }
     } else {
@@ -101,7 +105,12 @@ function App() {
           el.selectionStart,
           "ifThenElse"
         );
-      }else{
+      } else {
+        let selectionStart1 = el.selectionStart! + e.length + 2;
+        setCursorPosition({
+          el: activePath,
+          selectionStart: selectionStart1,
+        });
 
         update(activePath, e, el.selectionStart, "name");
       }
