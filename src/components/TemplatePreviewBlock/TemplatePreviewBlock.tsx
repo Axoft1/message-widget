@@ -4,9 +4,10 @@ import styles from "./TemplatePreviewBlock.module.scss";
 import { MentionsInput, Mention } from "react-mentions";
 import style from "../TemplateBlock/TemplateBlock.module.scss";
 import { useDataUpdate } from "../../Context";
+import { Data } from "../../Types";
 
 interface TemplatePreviewBlockProps {
-  data: Array<object>;
+  data: Data;
   arrVarNames: Array<string>;
 }
 const TemplatePreviewBlock = ({

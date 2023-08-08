@@ -3,16 +3,15 @@ import ConditionalTemplateBlock from "../ConditionalTemplateBlock/ConditionalTem
 import { useDataUpdate } from "../../Context";
 import styles from "./TemplateBlock.module.scss";
 import { Mention, MentionsInput } from "react-mentions";
+import { Data } from "../../Types";
 
 interface TemplateBlockProps {
-  data: Array<object>;
+  data: Data;
   path: Array<string | number>;
-  widgetController: (t: Array<string | number>) => void;
 }
 const TemplateBlock = ({
   data,
   path,
-  widgetController,
 }: TemplateBlockProps) => {
   const { update, setPath } = useDataUpdate();
  
@@ -53,7 +52,6 @@ const TemplateBlock = ({
                 }
               }
               path={curPath}
-              widgetController={widgetController}
             />
           </div>
         );

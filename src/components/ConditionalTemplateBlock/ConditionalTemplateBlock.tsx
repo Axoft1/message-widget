@@ -12,21 +12,19 @@ interface ConditionalTemplateBlockProps {
     else: Array<object>;
   };
   path: Array<string | number>;
-  widgetController: (t: Array<string | number>) => void;
 }
 const ConditionalTemplateBlock = ({
   condition,
   path,
-  widgetController,
 }: ConditionalTemplateBlockProps) => {
-  const { update, setPath } = useDataUpdate();
+  const { update, setPath, deletIfThenElse } = useDataUpdate();
   const ifPath = path.concat("if");
   return (
     <div className={styles.conditionalBlock}>
       <div className={styles.btn}>
         <Button
           onClick={() => {
-            widgetController(path);
+            deletIfThenElse(path);
           }}
           className="names"
         >
@@ -53,7 +51,6 @@ const ConditionalTemplateBlock = ({
         <div className={styles.ifBlock}>
           THEN{" "}
           <TemplateBlock
-            widgetController={widgetController}
             data={condition.then as Array<object>}
             path={path.concat("then")}
           />
@@ -61,7 +58,6 @@ const ConditionalTemplateBlock = ({
         <div className={styles.ifBlock}>
           ELSE{" "}
           <TemplateBlock
-            widgetController={widgetController}
             data={condition.else as Array<object>}
             path={path.concat("else")}
           />

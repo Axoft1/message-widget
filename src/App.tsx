@@ -7,11 +7,15 @@ import varNames from "./JSON/varNames.json";
 import Button from "./components/Button";
 import "./App.css";
 import { CSSTransition } from "react-transition-group";
+import { Data } from "./Types";
 
 function App() {
   const [show, setShow] = useState<boolean>(false);
-  const [data, setState] = useState<object>([""]);
-  const [cursorPosition, setCursorPosition] = useState<any>();
+  const [data, setState] = useState<Data>([""]);
+  const [cursorPosition, setCursorPosition] = useState<{
+    el: (string | number)[];
+    selectionStart: number | null;
+  }>();
   const [activePath, setPath] = useState<Array<string | number> | null>(null);
   const [arrVarNames, setArrVarNames] = useState<Array<string>>([]);
   const [inProp, setInProp] = useState(false);
@@ -21,17 +25,20 @@ function App() {
     path: Array<string | number>,
     val: string | object,
     selectionStart: number | null,
-    point: string
+    point: "delet" | "ifThenElse" | 'name'
   ) => {
-    setState((prevData: object): object =>
-      setDeepValue(prevData, path, val, selectionStart, point)
+    setState(
+      (prevData: Data): Data =>
+        setDeepValue(prevData, path, val, selectionStart, point)
     );
   };
 
   const el = document.querySelector(
     `[data-path="${activePath && activePath.join("-")}"]`
   ) as HTMLInputElement;
-  const widgetController = (value: string | (string | number)[]) => {
+
+  const deletIfThenElse = (value: string | (string | number)[]) => {
+    
     if (Array.isArray(value)) {
       update(value, "", null, "delet");
       return;
@@ -52,15 +59,7 @@ function App() {
       );
     }
   };
-
-  async function saveToLocalStorage(data: Object) {
-    try {
-      localStorage.setItem("data", JSON.stringify(data));
-    } catch (e: any) {
-      console.error(e.message);
-      return null;
-    }
-  }
+//Добавляет переменные в строку шаблона
   const addedVarName = (e: string): void => {
     if (activePath === null) {
       return;
@@ -74,7 +73,6 @@ function App() {
       el.selectionStart === 0
     ) {
       if (e === "ifThenElse") {
-        console.log(cursorPosition);
         update(
           activePath,
           {
@@ -86,10 +84,13 @@ function App() {
           "ifThenElse"
         );
       } else {
-        let selectionStart1 = cursorPosition.selectionStart + e.length + 2;
+        let selectionStartandVarName =
+          cursorPosition.selectionStart && cursorPosition.selectionStart +
+          e.length +
+          2;
         setCursorPosition({
           ...cursorPosition,
-          selectionStart: selectionStart1,
+          selectionStart: selectionStartandVarName,
         });
         update(activePath, e, cursorPosition.selectionStart, "name");
       }
@@ -104,21 +105,29 @@ function App() {
           },
           el.selectionStart,
           "ifThenElse"
-        );
-      } else {
-        let selectionStart1 = el.selectionStart! + e.length + 2;
-        setCursorPosition({
-          el: activePath,
-          selectionStart: selectionStart1,
-        });
-
-        update(activePath, e, el.selectionStart, "name");
+          );
+        } else {
+          let selectionStartandVarName = el.selectionStart! + e.length + 2;
+          setCursorPosition({
+            el: activePath,
+            selectionStart: selectionStartandVarName,
+          });
+          
+          update(activePath, e, el.selectionStart, "name");
+        }
+      }
+    };
+    
+    async function saveToLocalStorage(data: Object) {
+      try {
+        localStorage.setItem("data", JSON.stringify(data));
+      } catch (e: any) {
+        console.error(e.message);
+        return null;
       }
     }
-  };
-
-  useEffect(() => {
-    let data = localStorage.getItem("data");
+    useEffect(() => {
+      let data = localStorage.getItem("data");
     let arrVarNames = localStorage.getItem("arrVarNames");
     if (arrVarNames !== null) {
       let parsedData = JSON.parse(arrVarNames); // преобразуем строку в объект
@@ -135,7 +144,7 @@ function App() {
   }, []);
 
   return (
-    <DataContext.Provider value={{ update, setPath, setShow }}>
+    <DataContext.Provider value={{ update, setPath, setShow, deletIfThenElse }}>
       <div className="App">
         {!show && (
           <Button onClick={() => setShow(true)} className={"start"}>
@@ -164,7 +173,6 @@ function App() {
                 </div>
                 <div className="template">
                   <TemplateBlock
-                    widgetController={widgetController}
                     data={data as Array<object>}
                     path={[]}
                   />
