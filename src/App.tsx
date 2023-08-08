@@ -12,7 +12,6 @@ function App() {
   const [show, setShow] = useState<boolean>(false);
   const [data, setState] = useState<object>([""]);
   const [cursorPosition, setCursorPosition] = useState<number>(0);
-  const [valueName, setValueName] = useState<string>("");
   const [activePath, setPath] = useState<Array<string | number> | null>(null);
   const [arrVarNames, setArrVarNames] = useState<Array<string>>([]);
   const [inProp, setInProp] = useState(false);
@@ -66,21 +65,9 @@ function App() {
     if (activePath === null) {
       return;
     }    
-    setValueName(e);
-    setCursorPosition(
-      (e: number) => (e = el.selectionStart as number)
-    );
-  };
-  useEffect(() => {    
-    if (activePath && valueName !== "ifThenElse") {
-      update(
-        activePath,
-        valueName,
-        cursorPosition,
-        "name"
-      );
-    }
-  }, [cursorPosition, valueName]);
+    setCursorPosition((position)=> position+=e.length+2)
+    update(activePath, e, cursorPosition, "name");   
+  };  
 
   useEffect(() => {
     let data = localStorage.getItem("data");
@@ -102,7 +89,9 @@ function App() {
   
 
   return (
-    <DataContext.Provider value={{ update, setPath, setShow }}>
+    <DataContext.Provider
+      value={{ update, setPath, setShow, setCursorPosition }}
+    >
       <div className="App">
         {!show && (
           <Button onClick={() => setShow(true)} className={"start"}>

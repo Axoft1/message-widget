@@ -3,6 +3,7 @@ import { transformText } from "./transformText";
 import styles from "./TemplatePreviewBlock.module.scss";
 import { MentionsInput, Mention } from "react-mentions";
 import style from "../TemplateBlock/TemplateBlock.module.scss";
+import { useDataUpdate } from "../../Context";
 
 interface TemplatePreviewBlockProps {
   data: Array<object>;
@@ -12,7 +13,8 @@ const TemplatePreviewBlock = ({
   data,
   arrVarNames,
 }: TemplatePreviewBlockProps) => {
-  const [variableValue, setVariableValue] = useState({});  
+  const [variableValue, setVariableValue] = useState({}); 
+  const { setCursorPosition } = useDataUpdate(); 
   const variableHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVariableValue((variableValue) => ({
       ...variableValue,
@@ -29,6 +31,10 @@ const TemplatePreviewBlock = ({
       }));
     }
   }, [arrVarNames]);
+
+  const click = (e: any) => {
+    setCursorPosition(e.target.selectionStart);
+  };
 
   return (
     <div className={styles.previewBlock}>
@@ -47,6 +53,7 @@ const TemplatePreviewBlock = ({
             type="text"
             placeholder={el}
             onChange={variableHandler}
+            onClick={click}
           />
         ))}
       </div>
