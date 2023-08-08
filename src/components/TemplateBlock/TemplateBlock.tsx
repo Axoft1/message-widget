@@ -14,10 +14,8 @@ const TemplateBlock = ({
   path,
   widgetController,
 }: TemplateBlockProps) => {
-  const { update, setPath, setCursorPosition } = useDataUpdate();
-  const click = (e: any) => {
-    setCursorPosition(e.target.selectionStart);
-  };
+  const { update, setPath } = useDataUpdate();
+ 
   return (
     <div className={styles.block}>
       {data.map((val, index) => {
@@ -26,11 +24,11 @@ const TemplateBlock = ({
           return (
             <div key={index}>
               <MentionsInput
-                onClick={click}
                 key={index}
                 className={styles.mentionWrapper}
                 data-path={curPath.join("-")}
                 onFocus={() => {
+                  
                   setPath(curPath);
                 }}
                 value={val}

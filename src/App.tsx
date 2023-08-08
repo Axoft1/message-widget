@@ -11,7 +11,7 @@ import { CSSTransition } from "react-transition-group";
 function App() {
   const [show, setShow] = useState<boolean>(false);
   const [data, setState] = useState<object>([""]);
-  const [cursorPosition, setCursorPosition] = useState<number>(0);
+  const [cursorPosition, setCursorPosition] = useState<any>();
   const [activePath, setPath] = useState<Array<string | number> | null>(null);
   const [arrVarNames, setArrVarNames] = useState<Array<string>>([]);
   const [inProp, setInProp] = useState(false);
@@ -38,7 +38,7 @@ function App() {
     }
     if (activePath === null) {
       return;
-    } 
+    }
     if (value === "ifThenElse") {
       update(
         activePath,
@@ -64,10 +64,49 @@ function App() {
   const addedVarName = (e: string): void => {
     if (activePath === null) {
       return;
-    }    
-    setCursorPosition((position)=> position+=e.length+2)
-    update(activePath, e, cursorPosition, "name");   
-  };  
+    }
+    console.log(el.selectionStart);
+    if (el.selectionStart !== 0) {
+      setCursorPosition({ el: activePath, selectionStart: el.selectionStart });
+    }
+    if (
+      cursorPosition &&
+      cursorPosition.el === activePath &&
+      el.selectionStart === 0
+    ) {
+      if (e === "ifThenElse") {
+        update(
+          activePath,
+          {
+            if: "",
+            then: [""],
+            else: [""],
+          },
+          cursorPosition.selectionStart,
+          "ifThenElse"
+        );
+      }else{
+
+        update(activePath, e, cursorPosition.selectionStart, "name");
+      }
+    } else {
+      if (e === "ifThenElse") {
+        update(
+          activePath,
+          {
+            if: "",
+            then: [""],
+            else: [""],
+          },
+          el.selectionStart,
+          "ifThenElse"
+        );
+      }else{
+
+        update(activePath, e, el.selectionStart, "name");
+      }
+    }
+  };
 
   useEffect(() => {
     let data = localStorage.getItem("data");
@@ -86,12 +125,8 @@ function App() {
     }
   }, []);
 
-  
-
   return (
-    <DataContext.Provider
-      value={{ update, setPath, setShow, setCursorPosition }}
-    >
+    <DataContext.Provider value={{ update, setPath, setShow }}>
       <div className="App">
         {!show && (
           <Button onClick={() => setShow(true)} className={"start"}>
@@ -112,7 +147,7 @@ function App() {
                     >{`{${e}}`}</Button>
                   ))}
                   <Button
-                    onClick={() => widgetController("ifThenElse")}
+                    onClick={() => addedVarName("ifThenElse")}
                     className="names"
                   >
                     Add If-Then-Else

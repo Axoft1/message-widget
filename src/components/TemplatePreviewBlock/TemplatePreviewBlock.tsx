@@ -14,7 +14,6 @@ const TemplatePreviewBlock = ({
   arrVarNames,
 }: TemplatePreviewBlockProps) => {
   const [variableValue, setVariableValue] = useState({}); 
-  const { setCursorPosition } = useDataUpdate(); 
   const variableHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVariableValue((variableValue) => ({
       ...variableValue,
@@ -32,9 +31,7 @@ const TemplatePreviewBlock = ({
     }
   }, [arrVarNames]);
 
-  const click = (e: any) => {
-    setCursorPosition(e.target.selectionStart);
-  };
+ 
 
   return (
     <div className={styles.previewBlock}>
@@ -53,7 +50,6 @@ const TemplatePreviewBlock = ({
             type="text"
             placeholder={el}
             onChange={variableHandler}
-            onClick={click}
           />
         ))}
       </div>
