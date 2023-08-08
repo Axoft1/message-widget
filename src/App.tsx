@@ -10,8 +10,9 @@ import { CSSTransition } from "react-transition-group";
 
 function App() {
   const [show, setShow] = useState<boolean>(false);
-  const [data, setState] = useState<object>(['']);
+  const [data, setState] = useState<object>([""]);
   const [cursorPosition, setCursorPosition] = useState<number>(0);
+  const [valueName, setValueName] = useState<string>("");
   const [activePath, setPath] = useState<Array<string | number> | null>(null);
   const [arrVarNames, setArrVarNames] = useState<Array<string>>([]);
   const [inProp, setInProp] = useState(false);
@@ -22,27 +23,23 @@ function App() {
     val: string | object,
     selectionStart: number | null,
     point: string
-  ) => {    
+  ) => {
     setState((prevData: object): object =>
       setDeepValue(prevData, path, val, selectionStart, point)
     );
   };
-  
+
+  const el = document.querySelector(
+    `[data-path="${activePath && activePath.join("-")}"]`
+  ) as HTMLInputElement;
   const widgetController = (value: string | (string | number)[]) => {
-    
     if (Array.isArray(value)) {
       update(value, "", null, "delet");
       return;
     }
     if (activePath === null) {
       return;
-    }
-    const el = document.querySelector(`[data-path="${activePath.join("-")}"]`);
-  
-    
-    if ((el as HTMLInputElement).selectionStart !==  0) {      
-      setCursorPosition((e:number)=> e=(el as HTMLInputElement).selectionStart as number);
-    }
+    } 
     if (value === "ifThenElse") {
       update(
         activePath,
@@ -51,20 +48,11 @@ function App() {
           then: [""],
           else: [""],
         },
-        (el as HTMLInputElement).selectionStart,
+        el.selectionStart,
         "ifThenElse"
-        );
-      } else {
-      update(
-        activePath,
-        value,
-        (el as HTMLInputElement).selectionStart === 0
-          ? cursorPosition
-          : (el as HTMLInputElement).selectionStart,
-        "name"
       );
     }
-  }; 
+  };
 
   async function saveToLocalStorage(data: Object) {
     try {
@@ -74,6 +62,25 @@ function App() {
       return null;
     }
   }
+  const addedVarName = (e: string): void => {
+    if (activePath === null) {
+      return;
+    }    
+    setValueName(e);
+    setCursorPosition(
+      (e: number) => (e = el.selectionStart as number)
+    );
+  };
+  useEffect(() => {    
+    if (activePath && valueName !== "ifThenElse") {
+      update(
+        activePath,
+        valueName,
+        cursorPosition,
+        "name"
+      );
+    }
+  }, [cursorPosition, valueName]);
 
   useEffect(() => {
     let data = localStorage.getItem("data");
@@ -92,6 +99,8 @@ function App() {
     }
   }, []);
 
+  
+
   return (
     <DataContext.Provider value={{ update, setPath, setShow }}>
       <div className="App">
@@ -109,7 +118,7 @@ function App() {
                   {arrVarNames.map((e, index) => (
                     <Button
                       key={index}
-                      onClick={() => widgetController(e)}
+                      onClick={() => addedVarName(e)}
                       className="names"
                     >{`{${e}}`}</Button>
                   ))}

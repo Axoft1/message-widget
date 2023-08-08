@@ -53,7 +53,7 @@ export function setDeepValue(
       
       //Удаление If Then Else
       if (point === "delet" && typeof key === "number") {
-        const connectLines = `${current[key - 1]} ${current[key + 1]}`;
+        const connectLines = `${current[key - 1]}${current[key + 1]}`;
         current[key] = connectLines;
         current.splice(key - 1, 1);
         current.splice(key, 1);
@@ -83,7 +83,7 @@ export function setDeepValue(
       if (Array.isArray(current[key])) {
         current[key] = [...current[key]];
       } else {
-        current[key] = { ...current[key] };
+        current[key] = {...current[key]};
       }
       current = current[key];
     }
